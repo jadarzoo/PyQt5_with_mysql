@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QPushButton, QVBoxLayout, QWidget, QMainWindow, QLineEdit, QApplication, QLabel, \
-    QTableWidget, QTextEdit
+    QTableWidget, QTextEdit, QTableWidgetItem
 import mysql.connector
 
 conn = mysql.connector.connect(host="localhost",
@@ -21,29 +21,48 @@ class SHowWindow(QMainWindow):
         self.setWindowTitle("Result")
         # self.setFixedSize(300, 300)
         cursor.execute(f"select {self.poin} from {self.table};")
-
+        self.setFixedSize(800, 500)
         result = cursor.fetchall()
         layout = QVBoxLayout()
-        self.text_edit = QTextEdit()
-        # self.set
-        self.setStyleSheet("background-color: blue;")
-        self.text_edit.setStyleSheet("color: white;")
-        layout.addWidget(self.text_edit)
         text = ""
         for row in result:
             for el in row:
                 text += str(el) + "\t"
             text += "\n"
         print(text)
-        self.text_edit.setText(f"{text}")
-        self.scrollbar = self.text_edit.verticalScrollBar()
-        self.text_edit.setEnabled(1)
+
+        # self.text_edit = QTextEdit()
+        # self.setStyleSheet("background-color: blue;")
+        # self.text_edit.setStyleSheet("color: white;")
+        # layout.addWidget(self.text_edit)
+        # self.text_edit.setText(f"{text}")
+        # self.scrollbar = self.text_edit.verticalScrollBar()
+
+        w_table = QTableWidget()
+        cursor.execute(f"desc {table_name}")
+        colum = len(cursor.fetchall())
+        w_table.setColumnCount(colum)
+        cursor.execute(f"select count(id) from {table_name}")
+        rows = cursor.fetchall()
+        w_table.setRowCount(rows[0][0])
+        print("column", w_table.columnCount(), "row", w_table.rowCount())
+        # cursor.execute(f"select {self.poin} from {self.table};")
+        cursor.execute(f"DESC {table_name}")
+        columns = cursor.fetchall()
+        column_names = [col[0] for col in columns]
+        print("before hor")
+        w_table.setHorizontalHeaderLabels(column_names)
+        print("hor")
+        for row_num, row_data in enumerate(result):
+            for col_num, col_data in enumerate(row_data):
+                print("+++")
+                item = QTableWidgetItem(str(col_data))
+                print("------")
+                w_table.setItem(row_num, col_num, item)
+                print("=====")
+        layout.addWidget(w_table)
+
         cursor.close()
-        conn.close()
         continer = QWidget()
         continer.setLayout(layout)
         self.setCentralWidget(continer)
-
-    def cliks(self):
-        clicked_btn = self.sender()
-        print(clicked_btn.text())
