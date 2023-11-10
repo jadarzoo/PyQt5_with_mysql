@@ -1,0 +1,1 @@
+shunaqa gaplar
