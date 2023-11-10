@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QPushButton, QVBoxLayout, QWidget, QMainWindow, QLineEdit, QApplication, QLabel, \
-    QTableWidget, QTextEdit
+    QTableWidget, QTextEdit, QTableWidgetItem
 import mysql.connector
 
 conn = mysql.connector.connect(host="localhost",
@@ -21,23 +21,22 @@ class SHowWindow(QMainWindow):
         self.setWindowTitle("Result")
         # self.setFixedSize(300, 300)
         cursor.execute(f"select {self.poin} from {self.table};")
-
         result = cursor.fetchall()
         layout = QVBoxLayout()
-        self.text_edit = QTextEdit()
-        # self.set
-        self.setStyleSheet("background-color: blue;")
-        self.text_edit.setStyleSheet("color: white;")
-        layout.addWidget(self.text_edit)
         text = ""
         for row in result:
             for el in row:
                 text += str(el) + "\t"
             text += "\n"
         print(text)
+
+        self.text_edit = QTextEdit()
+        self.setStyleSheet("background-color: blue;")
+        self.text_edit.setStyleSheet("color: white;")
+        layout.addWidget(self.text_edit)
         self.text_edit.setText(f"{text}")
         self.scrollbar = self.text_edit.verticalScrollBar()
-        self.text_edit.setEnabled(1)
+
         cursor.close()
         conn.close()
         continer = QWidget()
