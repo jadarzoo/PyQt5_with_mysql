@@ -50,16 +50,11 @@ class SHowWindow(QMainWindow):
         cursor.execute(f"DESC {table_name}")
         columns = cursor.fetchall()
         column_names = [col[0] for col in columns]
-        print("before hor")
         w_table.setHorizontalHeaderLabels(column_names)
-        print("hor")
         for row_num, row_data in enumerate(result):
             for col_num, col_data in enumerate(row_data):
-                print("+++")
                 item = QTableWidgetItem(str(col_data))
-                print("------")
                 w_table.setItem(row_num, col_num, item)
-                print("=====")
         layout.addWidget(w_table)
 
         cursor.close()
