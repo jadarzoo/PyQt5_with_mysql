@@ -55,6 +55,10 @@ class SHowWindow(QMainWindow):
             for col_num, col_data in enumerate(row_data):
                 item = QTableWidgetItem(str(col_data))
                 w_table.setItem(row_num, col_num, item)
+
+        # w_table.setStyleSheet("background-color: blue;")
+        w_table.setStyleSheet("color: red,background-color: blue;")
+
         layout.addWidget(w_table)
 
         cursor.close()
